@@ -8,16 +8,8 @@ on:
 
 jobs:
   image-build:
-    runs-on: arc-runner-set
+    runs-on: ubuntu-latest
     steps:
-      - name: Force Install GIT latest
-        run: |
-          sudo apt-get update \
-          && sudo apt-get install -y software-properties-common \
-          && sudo apt-get update \
-          && sudo add-apt-repository -y ppa:git-core/ppa \
-          && sudo apt-get update \
-          && sudo apt-get install -y git
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up Docker Buildx
@@ -39,10 +31,10 @@ jobs:
           context: .
           file: ./Dockerfile
           cache-from: type=gha
-          platforms: ${{ inputs.platforms }}
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}  
+          platforms: linux/amd64
+          push: false
+          tags: latest
+          labels: localai
       #- name: Build and push AIO image
       #  uses: docker/build-push-action@v6
       #  with:
