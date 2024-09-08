@@ -49,15 +49,19 @@ jobs:
           platforms: linux/amd64
           push: false
           tags: localai:extras
+          load: true
       - name: Build and push AIO image
         uses: docker/build-push-action@v6
         with:
           builder: ${{ steps.buildx.outputs.name }}
           build-args: |
-            BASE_IMAGE=${{ steps.build_extra.outputs.image }}
+            BASE_IMAGE=localai:extras
             MAKEFLAGS=--jobs=4 --output-sync=target
           context: .
           file: ./Dockerfile.aio
           platforms: linux/amd64
           push: false
           tags: localai:aio
+          load: true
+      - name: Show Images
+        run: docker images
